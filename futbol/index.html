@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tienda de Fútbol</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Barra de Navegación -->
+    <header class="navbar">
+      <h1>Tienda de Fútbol</h1>
+      <input v-model="search" type="text" placeholder="Buscar productos..." />
+      <select v-model="selectedCategory">
+        <option value="">Todas las categorías</option>
+        <option v-for="category in categories" :key="category" :value="category">
+          {{ category }}
+        </option>
+      </select>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main>
+      <!-- Sección de Productos -->
+      <section class="products">
+        <h2>Productos Disponibles</h2>
+        <div v-if="filteredProducts.length > 0">
+          <div v-for="product in filteredProducts" :key="product.id" class="product-card">
+            <img :src="product.image" alt="Imagen del producto" />
+            <h3>{{ product.name }}</h3>
+            <p>{{ product.description }}</p>
+            <p><strong>{{ product.price }} COP</strong></p>
+            <button 
+              @click="addToCart(product)" 
+              :disabled="!product.available">
+              {{ product.available ? 'Agregar al carrito' : 'Agotado' }}
+            </button>
+          </div>
+        </div>
+        <p v-else>No se encontraron productos</p>
+      </section>
+
+      <!-- Sección del Carrito -->
+      <aside class="cart">
+        <h2>Carrito de Compras</h2>
+        <ul>
+          <li v-for="item in cart" :key="item.id">
+            {{ item.name }} - {{ item.price }} COP
+            <button @click="removeFromCart(item.id)">Eliminar</button>
+          </li>
+        </ul>
+        <p><strong>Total:</strong> {{ totalPrice }} COP</p>
+        <button class="checkout" :disabled="cart.length === 0">
+          Proceder al Pago
+        </button>
+      </aside>
+    </main>
+
+    <!-- Pie de Página -->
+    <footer>
+      <p>&copy; 2024 Tienda de Fútbol - Todos los derechos reservados</p>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuex@3"></script>
+  <script src="app.js"></script>
+</body>
+</html>
